@@ -67,8 +67,8 @@ Le MPD est l'implémentation concrète du MLD pour le SGBD MySQL. Le script de c
 ### 1. Clonage du dépôt
 
 ```bash
-git clone https://github.com/votre-username/gestion-stock-solidaire.git
-cd gestion-stock-solidaire
+git clone https://github.com/desire427/GESTION-BOUTIQUE-BRIF.git
+cd GESTION-BOUTIQUE-BRIF
 ```
 
 ### 2. Installation des dépendances
