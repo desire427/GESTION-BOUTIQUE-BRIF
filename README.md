@@ -95,14 +95,21 @@ CREATE TABLE IF NOT EXISTS PRODUITS (
     designation VARCHAR(255) NOT NULL,
     prix DECIMAL(10, 2) NOT NULL,
     stock_actuel INT DEFAULT 0,
+    seuil_alerte int DEFAULT '5',
+    en_rupture EUM("1","0") DEFAULT '0',
     id_categorie INT,
     FOREIGN KEY (id_categorie) REFERENCES CATEGORIES(id) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS UTILISATEURS (
-    id_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(100),
-    prenom VARCHAR(100)
+
+CREATE TABLE `UTILISATEURS` (
+    `id_utilisateur` int NOT NULL AUTO_INCREMENT,
+    `nom` varchar(20) NOT NULL,
+    `prenom` varchar(20) NOT NULL,
+    `role` varchar(20) NOT NULL,
+    `email` varchar(20) NOT NULL,
+    `telephone` varchar(20) NOT NULL,
+    PRIMARY KEY (`id_utilisateur`)
 );
 
 CREATE TABLE IF NOT EXISTS TRANSACTIONS (
@@ -114,7 +121,7 @@ CREATE TABLE IF NOT EXISTS TRANSACTIONS (
     date_mouvement DATE,
     FOREIGN KEY (id_produit) REFERENCES PRODUITS(id) ON DELETE CASCADE,
     FOREIGN KEY (id_utilisateur) REFERENCES UTILISATEURS(id_utilisateur)
-);  
+);
 ```
 
 ### 4. Configuration
