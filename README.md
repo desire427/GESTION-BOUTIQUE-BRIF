@@ -39,7 +39,7 @@ L'application s'appuie sur 4 entités principales :
 3.  **UTILISATEURS** : Acteurs effectuant les mouvements.
 4.  **TRANSACTIONS** : Table de liaison historisant les flux.  
 
-Cette section présente les différentes étapes de la modélisation de la base de données. Pour insérer vos captures d'écran, vous pouvez créer un dossier `/images/` à la racine de votre projet, y placer vos images, et elles s'afficheront automatiquement.
+Cette section présente les différentes étapes de la modélisation de la base de données. les etape sont dans le dossier `/images/`.
 
 #### Modèle Conceptuel de Données (MCD)
 Le MCD représente les entités principales du système et leurs relations.
