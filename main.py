@@ -101,8 +101,14 @@ def menu_supprimer_categorie():
     for cat in lister_categories():
         print(f"ID: {cat[0]} - {cat[1]}")
     
-    id_categorie = saisir_int(input("ID de la categorie a supprimer: "))
-    confirm = saisir_choix(f"Confirmer la suppression de la categorie ID {id_categorie}? (o/n): ")
+    while True:
+        try:
+            id_categorie = int(input("ID de la categorie a supprimer: "))
+            break
+        except ValueError:
+            print("Valeur invalide")
+    
+    confirm = input(f"Confirmer la suppression de la categorie ID {id_categorie}? (o/n): ")
     
     if confirm.lower() == 'o':
         supprimer_categorie(id_categorie)
@@ -116,8 +122,14 @@ def menu_supprimer_produit():
     for p in produits:
         print(f"ID: {p[0]} - {p[1]} | Categorie: {p[4]}")
     
-    id_produit = saisir_int(input("ID du produit a supprimer: "))
-    confirm = saisir_choix(f"Confirmer la suppression du produit ID {id_produit}? (o/n): ")
+    while True:
+        try:
+            id_produit = int(input("ID du produit a supprimer: "))
+            break
+        except ValueError:
+            print("Valeur invalide")
+    
+    confirm = input(f"Confirmer la suppression du produit ID {id_produit}? (o/n): ")
     
     if confirm.lower() == 'o':
         supprimer_produit(id_produit)
@@ -134,7 +146,7 @@ def menu_categories():
         print("3. Supprimer une categorie")
         print("4. Retour")
         
-        choix = saisir_choix("Choix: ")
+        choix = input("Choix: ")
         
         if choix == "1":
             nom = input("Nom de la categorie: ")
@@ -158,17 +170,29 @@ def menu_produits():
         print("2. Supprimer un produit")
         print("3. Retour")
         
-        choix = saisir_choix("Choix: ")
+        choix = input("Choix: ")
         
         if choix == "1":
             designation = input("Designation: ")
-            prix = saisir_float(input("Prix: "))
+            
+            while True:
+                try:
+                    prix = float(input("Prix: "))
+                    break
+                except ValueError:
+                    print("Valeur invalide")
             
             print("\nCategories disponibles:")
             for cat in lister_categories():
                 print(f"{cat[0]}. {cat[1]}")
             
-            id_categorie = saisir_int(input("ID de la categorie: "))
+            while True:
+                try:
+                    id_categorie = int(input("ID de la categorie: "))
+                    break
+                except ValueError:
+                    print("Valeur invalide")
+            
             ajouter_produit(designation, prix, id_categorie)
         
         elif choix == "2":
@@ -195,7 +219,12 @@ def menu_mouvements():
     for p in produits:
         print(f"ID: {p[0]} | {p[1]} | Stock actuel: {p[2]}")
 
-    id_produit = saisir_int(input("ID du produit: "))
+    while True:
+        try:
+            id_produit = int(input("ID du produit: "))
+            break
+        except ValueError:
+            print("Valeur invalide")
 
     cursor.execute("SELECT stock_actuel FROM PRODUITS WHERE id = %s", (id_produit,))
     stock_avant = cursor.fetchone()[0]
@@ -205,10 +234,21 @@ def menu_mouvements():
     for u in utilisateurs:
         print(f"ID: {u[0]} | {u[1]} {u[2]} | Role: {u[3]}")
 
-    id_utilisateur = saisir_int(input("ID utilisateur: "))
+    while True:
+        try:
+            id_utilisateur = int(input("ID utilisateur: "))
+            break
+        except ValueError:
+            print("Valeur invalide")
 
     print(f"Stock actuel avant mouvement: {stock_avant}")
-    quantite = saisir_int(input("Quantite (+ pour entree, - pour sortie): "))
+    
+    while True:
+        try:
+            quantite = int(input("Quantite (+ pour entree, - pour sortie): "))
+            break
+        except ValueError:
+            print("Valeur invalide")
 
     mouvement_stock(id_produit, id_utilisateur, quantite)
 
@@ -241,7 +281,7 @@ def menu_historique():
         print("3. Seulement les sorties")
         print("4. Retour")
         
-        choix = saisir_choix("Choix: ")
+        choix = input("Choix: ")
         
         if choix == "1":
             transactions = historique_transactions_total()
@@ -265,31 +305,6 @@ def menu_historique():
             break
 
 
-# FONCTIONS POUR LES CONTROLES DE SAISI:
-def saisir_int(message):
-    while True:
-        valeur = input(message)
-        try:
-            return int(valeur)
-        except ValueError:
-            print("Valeur invalide")
-
-def saisir_float(message):
-    while True:
-        valeur = input(message)
-        try:
-            return float(valeur)
-        except ValueError:
-            print("Valeur invalide")
-
-def saisir_choix(message):
-    while True:
-        valeur = input(message)
-        if valeur.strip():
-            return valeur
-        print("Choix invalide")
-
-
 # MENU PRINCIPAL
 def menu():
     while True:
@@ -305,7 +320,7 @@ def menu():
         print("7. Quitter")
         print("-"*50)
         
-        choix = saisir_choix("Votre choix (1-7): ")
+        choix = input("Votre choix (1-7): ")
         
         if choix == "1":
             menu_categories()
