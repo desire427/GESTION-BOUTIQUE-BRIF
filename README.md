@@ -39,7 +39,7 @@ L'application s'appuie sur 4 entités principales :
 3.  **UTILISATEURS** : Acteurs effectuant les mouvements.
 4.  **TRANSACTIONS** : Table de liaison historisant les flux.  
 
-Cette section présente les différentes étapes de la modélisation de la base de données. Pour insérer vos captures d'écran, vous pouvez créer un dossier `/images/` à la racine de votre projet, y placer vos images, et elles s'afficheront automatiquement.
+Cette section présente les différentes étapes de la modélisation de la base de données. les etape sont dans le dossier `/images/`.
 
 #### Modèle Conceptuel de Données (MCD)
 Le MCD représente les entités principales du système et leurs relations.
@@ -67,8 +67,8 @@ Le MPD est l'implémentation concrète du MLD pour le SGBD MySQL. Le script de c
 ### 1. Clonage du dépôt
 
 ```bash
-git clone https://github.com/votre-username/gestion-stock-solidaire.git
-cd gestion-stock-solidaire
+git clone https://github.com/desire427/GESTION-BOUTIQUE-BRIF.git
+cd GESTION-BOUTIQUE-BRIF
 ```
 
 ### 2. Installation des dépendances
@@ -95,14 +95,21 @@ CREATE TABLE IF NOT EXISTS PRODUITS (
     designation VARCHAR(255) NOT NULL,
     prix DECIMAL(10, 2) NOT NULL,
     stock_actuel INT DEFAULT 0,
+    seuil_alerte int DEFAULT '5',
+    en_rupture EUM("1","0") DEFAULT '0',
     id_categorie INT,
     FOREIGN KEY (id_categorie) REFERENCES CATEGORIES(id) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS UTILISATEURS (
-    id_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(100),
-    prenom VARCHAR(100)
+
+CREATE TABLE `UTILISATEURS` (
+    `id_utilisateur` int NOT NULL AUTO_INCREMENT,
+    `nom` varchar(20) NOT NULL,
+    `prenom` varchar(20) NOT NULL,
+    `role` varchar(20) NOT NULL,
+    `email` varchar(20) NOT NULL,
+    `telephone` varchar(20) NOT NULL,
+    PRIMARY KEY (`id_utilisateur`)
 );
 
 CREATE TABLE IF NOT EXISTS TRANSACTIONS (
@@ -114,7 +121,7 @@ CREATE TABLE IF NOT EXISTS TRANSACTIONS (
     date_mouvement DATE,
     FOREIGN KEY (id_produit) REFERENCES PRODUITS(id) ON DELETE CASCADE,
     FOREIGN KEY (id_utilisateur) REFERENCES UTILISATEURS(id_utilisateur)
-);  
+);
 ```
 
 ### 4. Configuration
