@@ -209,7 +209,7 @@ def menu_liste_produits():
     produits = lister_produits_categorie()
     print("\n--- PRODUITS AVEC CATEGORIES ---")
     for p in produits:
-        print(f"ID: {p[0]} | {p[1]} | Prix: {p[2]} | Stock: {p[3]} | Categorie: {p[4]}")
+        print(f"ID: {p[0]} | {p[1]} | Prix: {p[2]} | Stock: {p[3]} | Categorie: {p[4]}") 
 
 def menu_alertes():
     alertes = alerte_stock_faible()
