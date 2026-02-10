@@ -10,12 +10,12 @@ conn = mysql.connector.connect(
 )
 cursor = conn.cursor()
 
-# Fonctions existantes
+# Fonctions
 def ajouter_categorie(nom):
     sql = "INSERT INTO CATEGORIES (nom_categorie) VALUES (%s)"
     cursor.execute(sql, (nom,))
     conn.commit()
-    print(f"OK Categorie '{nom}' ajoutee.")
+    print(f"Categorie '{nom}' ajoutee.")
 
 def lister_categories():
     cursor.execute("SELECT * FROM CATEGORIES")
@@ -25,7 +25,7 @@ def ajouter_produit(designation, prix, id_categorie):
     sql = """INSERT INTO PRODUITS (designation, prix, id_categorie) VALUES (%s, %s, %s)"""
     cursor.execute(sql, (designation, prix, id_categorie))
     conn.commit()
-    print(f"OK Produit '{designation}' ajoute.")
+    print(f"Produit '{designation}' ajoute.")
 
 def mouvement_stock(id_produit, id_utilisateur, quantite):
     type_mvt = 'ENTREE' if quantite > 0 else 'SORTIE'
@@ -40,7 +40,7 @@ def mouvement_stock(id_produit, id_utilisateur, quantite):
     
     cursor.execute(sql_update, (abs(quantite), id_produit))
     conn.commit()
-    print(f"OK Mouvement de {quantite} unites enregistre.")
+    print(f"Mouvement de {quantite} unites enregistre.")
 
 def lister_produits_categorie():
     sql = """SELECT p.id, p.designation, p.prix, p.stock_actuel, c.nom_categorie 
@@ -167,13 +167,43 @@ def menu_produits():
     
     id_categorie = int(input("ID de la categorie: "))
     ajouter_produit(designation, prix, id_categorie)
+def lister_tous_produits():
+    cursor.execute("SELECT id, designation, stock_actuel FROM PRODUITS")
+    return cursor.fetchall()
+
+def lister_utilisateurs():
+    cursor.execute("SELECT id_utilisateur, nom, prenom, role FROM UTILISATEURS")
+    return cursor.fetchall()
 
 def menu_mouvements():
     print("\n--- MOUVEMENT DE STOCK ---")
+
+    print("\nProduits disponibles:")
+    produits = lister_tous_produits()
+    for p in produits:
+        print(f"ID: {p[0]} | {p[1]} | Stock actuel: {p[2]}")
+
     id_produit = int(input("ID du produit: "))
+
+    cursor.execute("SELECT stock_actuel FROM PRODUITS WHERE id = %s", (id_produit,))
+    stock_avant = cursor.fetchone()[0]
+
+    print("\nUtilisateurs disponibles:")
+    utilisateurs = lister_utilisateurs()
+    for u in utilisateurs:
+        print(f"ID: {u[0]} | {u[1]} {u[2]} | Role: {u[3]}")
+
     id_utilisateur = int(input("ID utilisateur: "))
+
+    print(f"Stock actuel avant mouvement: {stock_avant}")
     quantite = int(input("Quantite (+ pour entree, - pour sortie): "))
+
     mouvement_stock(id_produit, id_utilisateur, quantite)
+
+    cursor.execute("SELECT stock_actuel FROM PRODUITS WHERE id = %s", (id_produit,))
+    stock_apres = cursor.fetchone()[0]
+
+    print(f"Quantite actuelle est de {stock_apres}")
 
 def menu_liste_produits():
     produits = lister_produits_categorie()
