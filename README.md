@@ -30,7 +30,10 @@ L'application implémente une logique métier relationnelle multi-tables pour li
 
 ## Architecture Technique
 
-Le projet repose sur une architecture MVC simplifiée (Modèle-Vue-Contrôleur) au sein d'un script CLI, interagissant avec une base de données relationnelle MySQL.
+Le projet repose sur une architecture MVC simplifiée (Modèle-Vue-Contrôleur) au sein d'un script CLI, interagissant avec une base de données relationnelle MySQL.  
+
+## Comportement des fonctions  
+
 
 ### Modèles de Données
 L'application s'appuie sur 4 entités principales :

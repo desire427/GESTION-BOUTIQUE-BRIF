@@ -101,8 +101,8 @@ def menu_supprimer_categorie():
     for cat in lister_categories():
         print(f"ID: {cat[0]} - {cat[1]}")
     
-    id_categorie = int(input("ID de la categorie a supprimer: "))
-    confirm = input(f"Confirmer la suppression de la categorie ID {id_categorie}? (o/n): ")
+    id_categorie = saisir_int(input("ID de la categorie a supprimer: "))
+    confirm = saisir_choix(f"Confirmer la suppression de la categorie ID {id_categorie}? (o/n): ")
     
     if confirm.lower() == 'o':
         supprimer_categorie(id_categorie)
@@ -116,49 +116,14 @@ def menu_supprimer_produit():
     for p in produits:
         print(f"ID: {p[0]} - {p[1]} | Categorie: {p[4]}")
     
-    id_produit = int(input("ID du produit a supprimer: "))
-    confirm = input(f"Confirmer la suppression du produit ID {id_produit}? (o/n): ")
+    id_produit = saisir_int(input("ID du produit a supprimer: "))
+    confirm = saisir_choix(f"Confirmer la suppression du produit ID {id_produit}? (o/n): ")
     
     if confirm.lower() == 'o':
         supprimer_produit(id_produit)
     else:
         print("Suppression annulee.")
 
-
-# MENU PRINCIPAL
-def menu():
-    while True:
-        print("\n" + "="*50)
-        print("GESTION DE STOCK - MENU PRINCIPAL")
-        print("="*50)
-        print("1. Gestion des Categories")
-        print("2. Gestion des Produits")
-        print("3. Mouvement de Stock")
-        print("4. Liste des produits avec categories")
-        print("5. Alertes stock faible (<5 unites)")
-        print("6. Historique des transactions")
-        print("7. Quitter")
-        print("-"*50)
-        
-        choix = input("Votre choix (1-7): ")
-        
-        if choix == "1":
-            menu_categories()
-        elif choix == "2":
-            menu_produits()
-        elif choix == "3":
-            menu_mouvements()
-        elif choix == "4":
-            menu_liste_produits()
-        elif choix == "5":
-            menu_alertes()
-        elif choix == "6":
-            menu_historique()
-        elif choix == "7":
-            print("Au revoir!")
-            break
-        else:
-            print("Choix invalide!")
 
 # SOUS-MENUS EXISTANTS
 def menu_categories():
@@ -169,7 +134,7 @@ def menu_categories():
         print("3. Supprimer une categorie")
         print("4. Retour")
         
-        choix = input("Choix: ")
+        choix = saisir_choix("Choix: ")
         
         if choix == "1":
             nom = input("Nom de la categorie: ")
@@ -193,17 +158,17 @@ def menu_produits():
         print("2. Supprimer un produit")
         print("3. Retour")
         
-        choix = input("Choix: ")
+        choix = saisir_choix("Choix: ")
         
         if choix == "1":
             designation = input("Designation: ")
-            prix = float(input("Prix: "))
+            prix = saisir_float(input("Prix: "))
             
             print("\nCategories disponibles:")
             for cat in lister_categories():
                 print(f"{cat[0]}. {cat[1]}")
             
-            id_categorie = int(input("ID de la categorie: "))
+            id_categorie = saisir_int(input("ID de la categorie: "))
             ajouter_produit(designation, prix, id_categorie)
         
         elif choix == "2":
@@ -230,7 +195,7 @@ def menu_mouvements():
     for p in produits:
         print(f"ID: {p[0]} | {p[1]} | Stock actuel: {p[2]}")
 
-    id_produit = int(input("ID du produit: "))
+    id_produit = saisir_int(input("ID du produit: "))
 
     cursor.execute("SELECT stock_actuel FROM PRODUITS WHERE id = %s", (id_produit,))
     stock_avant = cursor.fetchone()[0]
@@ -240,10 +205,10 @@ def menu_mouvements():
     for u in utilisateurs:
         print(f"ID: {u[0]} | {u[1]} {u[2]} | Role: {u[3]}")
 
-    id_utilisateur = int(input("ID utilisateur: "))
+    id_utilisateur = saisir_int(input("ID utilisateur: "))
 
     print(f"Stock actuel avant mouvement: {stock_avant}")
-    quantite = int(input("Quantite (+ pour entree, - pour sortie): "))
+    quantite = saisir_int(input("Quantite (+ pour entree, - pour sortie): "))
 
     mouvement_stock(id_produit, id_utilisateur, quantite)
 
@@ -276,7 +241,7 @@ def menu_historique():
         print("3. Seulement les sorties")
         print("4. Retour")
         
-        choix = input("Choix: ")
+        choix = saisir_choix("Choix: ")
         
         if choix == "1":
             transactions = historique_transactions_total()
@@ -299,7 +264,68 @@ def menu_historique():
         elif choix == "4":
             break
 
-# Lancer l'application
+
+# FONCTIONS POUR LES CONTROLES DE SAISI:
+def saisir_int(message):
+    while True:
+        valeur = input(message)
+        try:
+            return int(valeur)
+        except ValueError:
+            print("Valeur invalide")
+
+def saisir_float(message):
+    while True:
+        valeur = input(message)
+        try:
+            return float(valeur)
+        except ValueError:
+            print("Valeur invalide")
+
+def saisir_choix(message):
+    while True:
+        valeur = input(message)
+        if valeur.strip():
+            return valeur
+        print("Choix invalide")
+
+
+# MENU PRINCIPAL
+def menu():
+    while True:
+        print("\n" + "="*50)
+        print("GESTION DE STOCK - MENU PRINCIPAL")
+        print("="*50)
+        print("1. Gestion des Categories")
+        print("2. Gestion des Produits")
+        print("3. Mouvement de Stock")
+        print("4. Liste des produits avec categories")
+        print("5. Alertes stock faible (<5 unites)")
+        print("6. Historique des transactions")
+        print("7. Quitter")
+        print("-"*50)
+        
+        choix = saisir_choix("Votre choix (1-7): ")
+        
+        if choix == "1":
+            menu_categories()
+        elif choix == "2":
+            menu_produits()
+        elif choix == "3":
+            menu_mouvements()
+        elif choix == "4":
+            menu_liste_produits()
+        elif choix == "5":
+            menu_alertes()
+        elif choix == "6":
+            menu_historique()
+        elif choix == "7":
+            print("Au revoir!")
+            break
+        else:
+            print("Choix invalide!")
+
+
 menu()
 cursor.close()
 conn.close()
