@@ -94,6 +94,37 @@ def historique_sorties():
     cursor.execute(sql)
     return cursor.fetchall()
 
+
+def menu_supprimer_categorie():
+    print("\n--- SUPPRIMER UNE CATEGORIE ---")
+    print("Categories existantes:")
+    for cat in lister_categories():
+        print(f"ID: {cat[0]} - {cat[1]}")
+    
+    id_categorie = int(input("ID de la categorie a supprimer: "))
+    confirm = input(f"Confirmer la suppression de la categorie ID {id_categorie}? (o/n): ")
+    
+    if confirm.lower() == 'o':
+        supprimer_categorie(id_categorie)
+    else:
+        print("Suppression annulee.")
+
+def menu_supprimer_produit():
+    print("\n--- SUPPRIMER UN PRODUIT ---")
+    produits = lister_produits_categorie()
+    print("Produits existants:")
+    for p in produits:
+        print(f"ID: {p[0]} - {p[1]} | Categorie: {p[4]}")
+    
+    id_produit = int(input("ID du produit a supprimer: "))
+    confirm = input(f"Confirmer la suppression du produit ID {id_produit}? (o/n): ")
+    
+    if confirm.lower() == 'o':
+        supprimer_produit(id_produit)
+    else:
+        print("Suppression annulee.")
+
+
 # MENU PRINCIPAL
 def menu():
     while True:
@@ -101,17 +132,15 @@ def menu():
         print("GESTION DE STOCK - MENU PRINCIPAL")
         print("="*50)
         print("1. Gestion des Categories")
-        print("2. Catalogue Produits")
+        print("2. Gestion des Produits")
         print("3. Mouvement de Stock")
         print("4. Liste des produits avec categories")
         print("5. Alertes stock faible (<5 unites)")
         print("6. Historique des transactions")
-        print("7. Supprimer une categorie")
-        print("8. Supprimer un produit")
-        print("9. Quitter")
+        print("7. Quitter")
         print("-"*50)
         
-        choix = input("Votre choix (1-9): ")
+        choix = input("Votre choix (1-7): ")
         
         if choix == "1":
             menu_categories()
@@ -126,10 +155,6 @@ def menu():
         elif choix == "6":
             menu_historique()
         elif choix == "7":
-            menu_supprimer_categorie()
-        elif choix == "8":
-            menu_supprimer_produit()
-        elif choix == "9":
             print("Au revoir!")
             break
         else:
@@ -141,7 +166,8 @@ def menu_categories():
         print("\n--- GESTION CATEGORIES ---")
         print("1. Ajouter une categorie")
         print("2. Lister toutes les categories")
-        print("3. Retour au menu principal")
+        print("3. Supprimer une categorie")
+        print("4. Retour")
         
         choix = input("Choix: ")
         
@@ -154,19 +180,40 @@ def menu_categories():
             for cat in categories:
                 print(f"ID: {cat[0]} - {cat[1]}")
         elif choix == "3":
+            menu_supprimer_categorie()
+        elif choix == "4":
             break
+        else:
+            print("Choix invalide!")
 
 def menu_produits():
-    print("\n--- AJOUTER UN PRODUIT ---")
-    designation = input("Designation: ")
-    prix = float(input("Prix: "))
-    
-    print("\nCategories disponibles:")
-    for cat in lister_categories():
-        print(f"{cat[0]}. {cat[1]}")
-    
-    id_categorie = int(input("ID de la categorie: "))
-    ajouter_produit(designation, prix, id_categorie)
+    while True:
+        print("\n--- GESTION PRODUITS ---")
+        print("1. Ajouter un produit")
+        print("2. Supprimer un produit")
+        print("3. Retour")
+        
+        choix = input("Choix: ")
+        
+        if choix == "1":
+            designation = input("Designation: ")
+            prix = float(input("Prix: "))
+            
+            print("\nCategories disponibles:")
+            for cat in lister_categories():
+                print(f"{cat[0]}. {cat[1]}")
+            
+            id_categorie = int(input("ID de la categorie: "))
+            ajouter_produit(designation, prix, id_categorie)
+        
+        elif choix == "2":
+            menu_supprimer_produit()
+        
+        elif choix == "3":
+            break
+        else:
+            print("Choix invalide!")
+
 def lister_tous_produits():
     cursor.execute("SELECT id, designation, stock_actuel FROM PRODUITS")
     return cursor.fetchall()
@@ -251,35 +298,6 @@ def menu_historique():
         
         elif choix == "4":
             break
-
-def menu_supprimer_categorie():
-    print("\n--- SUPPRIMER UNE CATEGORIE ---")
-    print("Categories existantes:")
-    for cat in lister_categories():
-        print(f"ID: {cat[0]} - {cat[1]}")
-    
-    id_categorie = int(input("ID de la categorie a supprimer: "))
-    confirm = input(f"Confirmer la suppression de la categorie ID {id_categorie}? (o/n): ")
-    
-    if confirm.lower() == 'o':
-        supprimer_categorie(id_categorie)
-    else:
-        print("Suppression annulee.")
-
-def menu_supprimer_produit():
-    print("\n--- SUPPRIMER UN PRODUIT ---")
-    produits = lister_produits_categorie()
-    print("Produits existants:")
-    for p in produits:
-        print(f"ID: {p[0]} - {p[1]} | Categorie: {p[4]}")
-    
-    id_produit = int(input("ID du produit a supprimer: "))
-    confirm = input(f"Confirmer la suppression du produit ID {id_produit}? (o/n): ")
-    
-    if confirm.lower() == 'o':
-        supprimer_produit(id_produit)
-    else:
-        print("Suppression annulee.")
 
 # Lancer l'application
 menu()
